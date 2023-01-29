@@ -1,12 +1,25 @@
 {
-  "name": "2",
+  "name": "c",
   "version": "1.0.0",
-  "description": "",
   "main": "const.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate": "knex migrate:latest --knexfile ./knexfile.js"
   },
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/watsjustice/tgbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/watsjustice/tgbot/issues"
+  },
+  "homepage": "https://github.com/watsjustice/tgbot#readme",
+  "description": "",
+  "dependencies": {
+    "knex": "^2.4.2",
+    "objection": "^3.0.1",
+    "pg": "^8.8.0"
+  }
 }

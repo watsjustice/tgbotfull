@@ -1,9 +1,10 @@
 {
   "name": "c",
   "version": "1.0.0",
-  "main": "const.js",
+  "main": "src/const.ts",
   "scripts": {
-    "migrate": "knex migrate:latest --knexfile ./knexfile.js"
+    "migrate": "knex migrate:latest --knexfile ./knexfile.ts",
+    "start": "tsc && node dist/const.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,11 +18,13 @@
   "homepage": "https://github.com/watsjustice/tgbot#readme",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "knex": "^2.4.2",
     "objection": "^3.0.1",
     "pg": "^8.8.0",
     "telegraf": "^4.11.2",
     "telegraph": "^0.8.22",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   },
   "devDependencies": {

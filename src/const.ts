@@ -1,5 +1,7 @@
-import {SceneGenerator} from "./scenes.js";
+import { SceneGenerator } from "./bot/scenes";
 import {session, Telegraf, Scenes, Context} from "telegraf";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 interface sessionData {
     thesub: number,
@@ -12,7 +14,7 @@ export interface BotContext extends Context {
     session: sessionData,
 }
 
-const bot = new Telegraf<BotContext>('5695594281:AAHLeRNeAoLbp0zL3fIvsbVRxgB8Q3T1whg');
+const bot = new Telegraf<BotContext>(process.env.BOT_TOKEN);
 const curScene : SceneGenerator = new SceneGenerator()
 const opt : any = curScene.reSendMess()
 const ssstage : any = curScene.Stages()
@@ -25,10 +27,18 @@ const remoteQuestions : any = curScene.remoteQuestions()
 const AcceptTheSub : any = curScene.AcceptTheSub()
 const resendAction : any = curScene.ReSendAction()
 
-
-const stage : any = new Scenes.Stage([opt,ssstage,subpayment,paymentinfo,accesspayment,subStatus,remoteQuestions,infoAbout,AcceptTheSub,resendAction]);
-
-
+const stage : any = new Scenes.Stage([
+    opt,
+    ssstage,
+    subpayment,
+    paymentinfo,
+    accesspayment,
+    subStatus,
+    remoteQuestions,
+    infoAbout,
+    AcceptTheSub,
+    resendAction
+]);
 
 
 bot.use(session({}), stage.middleware());
@@ -107,6 +117,6 @@ bot.command('q1f8y', async (ctx : any) => {
 
 
 
-await bot.launch()
+bot.launch();
 
 

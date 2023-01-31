@@ -1,7 +1,9 @@
-import {User} from "../../entities/user_entity.js";
+import { User } from "../../entities/user_entity"
+import { Knex } from "knex";
 
 
-export async function up(knex) {
+
+export async function up(knex: Knex) {
   return knex.schema.createTable(User.tableName, table => {
     table
         .string('id')
@@ -16,11 +18,9 @@ export async function up(knex) {
 
     table
         .integer('duration')
-  })
-
-  return knex;
+  });
 }
 
-export async function down(knex) {
+export async function down(knex: Knex) {
   return knex.schema.dropTable(User.tableName);
 }

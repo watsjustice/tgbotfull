@@ -2,18 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SceneGenerator = void 0;
 const telegraf_1 = require("telegraf");
-const knexfile_js_1 = require("../knexfile.js");
-const knex_1 = require("knex");
-const user_entity_js_1 = require("../entities/user_entity.js");
-const objection_1 = require("objection");
-objection_1.Model.knex((0, knex_1.default)(knexfile_js_1.default.development));
+const user_entity_1 = require("../entities/user_entity");
 class SceneGenerator {
     reSendMess() {
         const message = new telegraf_1.Scenes.BaseScene('main menu');
         message.enter(async (ctx) => {
-            const user = await user_entity_js_1.User.query().findById(ctx.from.id).returning('*');
+            const user = await user_entity_1.User.query().findById(ctx.from.id).returning('*');
             if (!user) {
-                await user_entity_js_1.User.query().insert({
+                await user_entity_1.User.query().insert({
                     id: ctx.from.id,
                     status: false,
                 });
@@ -219,7 +215,7 @@ class SceneGenerator {
         let status = [0];
         sub.enter(async (ctx) => {
             let text = '';
-            const user = await user_entity_js_1.User.query().findById(ctx.chat.id).returning('status');
+            const user = await user_entity_1.User.query().findById(ctx.chat.id).returning('status');
             if (!ctx.session.message_id) {
                 const { message_id } = await ctx.replyWithHTML(text, {
                     reply_markup: {
@@ -335,7 +331,7 @@ class SceneGenerator {
         });
         acc.on('text', async (ctx) => {
             try {
-                await user_entity_js_1.User.query().findById(ctx.message.text).patch({
+                await user_entity_1.User.query().findById(ctx.message.text).patch({
                     status: true,
                 });
                 await ctx.telegram.sendMessage(ctx.message.text, '✅Ваша заявка была одобрена', {
@@ -347,7 +343,7 @@ class SceneGenerator {
                 await ctx.replyWithHTML('<b>Неверный id</b>');
             }
             let date = new Date();
-            await user_entity_js_1.User.query().findById(ctx.message.text).patch({
+            await user_entity_1.User.query().findById(ctx.message.text).patch({
                 date: String(date.getFullYear()) + '-' + '0' + String(date.getMonth() + 1) + '-' + String(date.getDate()),
                 duration: ctx.session.durationsub,
             });
@@ -362,7 +358,7 @@ class SceneGenerator {
         });
         messages.on('text', async (ctx) => {
             ctx.session.messageId = ctx.message.message_id;
-            const userData = await user_entity_js_1.User.query().returning('*');
+            const userData = await user_entity_1.User.query().returning('*');
             for (let item in userData) {
                 let dat = new Date();
                 let theDateOfTheStart = new Date(userData[item].date);
@@ -378,7 +374,7 @@ class SceneGenerator {
         });
         messages.on('photo', async (ctx) => {
             ctx.session.messageId = ctx.message.message_id;
-            const userData = await user_entity_js_1.User.query().returning('*');
+            const userData = await user_entity_1.User.query().returning('*');
             for (let item in userData) {
                 let dat = new Date();
                 let theDateOfTheStart = new Date(userData[item].date);

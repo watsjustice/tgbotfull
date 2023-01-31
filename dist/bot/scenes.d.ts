@@ -1,6 +1,6 @@
 import { Context, Scenes } from "telegraf";
-import { Update } from "telegraf/typings/core/types/typegram.js";
-import { BotContext } from '../bot/const.js';
+import { Update } from "telegraf/typings/core/types/typegram";
+import { BotContext } from '../const';
 export declare class SceneGenerator {
     reSendMess(): Scenes.BaseScene<Context<Update>>;
     Stages(): Scenes.BaseScene<BotContext>;

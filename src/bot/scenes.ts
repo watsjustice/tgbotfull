@@ -1,13 +1,10 @@
-import {Context, Scenes, } from "telegraf";
-import knexfile from "../knexfile.js";
-import Knex from "knex";
-import {User} from "../entities/user_entity.js";
-import {Model} from "objection";
-import { Update } from "telegraf/typings/core/types/typegram.js";
-import  { samples } from '../bot/texts'
-import { BotContext } from '../bot/const.js'
+import {Context, Scenes} from "telegraf";
+import { Update } from "telegraf/typings/core/types/typegram";
+import { samples } from '../bot/texts'
+import { BotContext } from '../const'
+import { User } from "../entities/user_entity";
 
-Model.knex(Knex(knexfile.development));
+
 export class SceneGenerator{
 
 	reSendMess(){

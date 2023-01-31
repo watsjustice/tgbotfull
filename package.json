@@ -7,7 +7,6 @@
   },
   "author": "",
   "license": "ISC",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/watsjustice/tgbot.git"
@@ -20,6 +19,12 @@
   "dependencies": {
     "knex": "^2.4.2",
     "objection": "^3.0.1",
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "telegraf": "^4.11.2",
+    "telegraph": "^0.8.22",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.6.6"
   }
 }

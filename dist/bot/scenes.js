@@ -14,13 +14,11 @@ class SceneGenerator {
                     status: false,
                 });
             }
-            if (ctx.session.message_id) {
-            }
-            else {
+            if (!ctx.session.message_id) {
                 ctx.session.message_id = NaN;
             }
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML('<b>Главое меню</b>', {
+                const message_id = await ctx.replyWithHTML('<b>Главое меню</b>', {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -39,7 +37,7 @@ class SceneGenerator {
             }
             else {
                 try {
-                    const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, '<b>Главое меню</b>', {
+                    const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, '<b>Главое меню</b>', {
                         reply_markup: {
                             one_time_keyboard: true,
                             inline_keyboard: [
@@ -66,7 +64,7 @@ class SceneGenerator {
         const stage = new telegraf_1.Scenes.BaseScene('stage');
         stage.enter(async (ctx) => {
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML("\u0427\u0442\u043E\u0431\u044B \u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F \u0441 \u0442\u0430\u0440\u0438\u0444\u043E\u043C, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0439, \u043D\u0430\u0436\u0430\u0432 \u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443", {
+                const message_id = await ctx.replyWithHTML("\u0427\u0442\u043E\u0431\u044B \u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F \u0441 \u0442\u0430\u0440\u0438\u0444\u043E\u043C, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0439, \u043D\u0430\u0436\u0430\u0432 \u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443", {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -83,7 +81,7 @@ class SceneGenerator {
                 ctx.session.message_id = message_id;
             }
             else {
-                const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, "\u0427\u0442\u043E\u0431\u044B \u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F \u0441 \u0442\u0430\u0440\u0438\u0444\u043E\u043C, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0439, \u043D\u0430\u0436\u0430\u0432 \u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443", {
+                const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, "\u0427\u0442\u043E\u0431\u044B \u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C\u0441\u044F \u0441 \u0442\u0430\u0440\u0438\u0444\u043E\u043C, \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0439, \u043D\u0430\u0436\u0430\u0432 \u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443", {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -118,7 +116,7 @@ class SceneGenerator {
                     break;
             }
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML(text, {
+                const message_id = await ctx.replyWithHTML(text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -133,7 +131,7 @@ class SceneGenerator {
                 ctx.session.message_id = message_id;
             }
             else {
-                const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
+                const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -154,7 +152,7 @@ class SceneGenerator {
         const info = new telegraf_1.Scenes.BaseScene('payinfo');
         info.enter(async (ctx) => {
             let text = "\u0421\u043F\u043E\u0441\u043E\u0431 \u043E\u043F\u043B\u0430\u0442\u044B: \u0422\u0438\u043D\u044C\u043A\u043E\u0444\u0444/\u0421\u0431\u0435\u0440/\u0410\u043B\u044C\u0444\u0430\n\u041A \u043E\u043F\u043B\u0430\u0442\u0435: 10.00 \uD83C\uDDF7\uD83C\uDDFARUB\n\u0412\u0430\u0448 ID: ${ctx.chat.id}\n\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442\u044B \u0434\u043B\u044F \u043E\u043F\u043B\u0430\u0442\u044B:\n\n\u041F\u0435\u0440\u0435\u0432\u043E\u0434 \u0441\u043E\u0433\u043B\u0430\u0441\u043D\u043E \u0442\u0430\u0440\u0438\u0444\u0443 \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0432\u044B\u0431\u0440\u0430\u043B\u0438:\n\uD83D\uDC9A1 \u043C\u0435\u0441\u044F\u0446 - 1.490\n\uD83D\uDC9A3 \u043C\u0435\u0441\u044F\u0446\u0430 - 3.990\n\uD83D\uDC9A1 \u0433\u043E\u0434 - 14.990\n----------------------------------\n\u041D\u043E\u043C\u0435\u0440 \u043A\u0430\u0440\u0442\u044B \u0434\u043B\u044F \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430:\n\uD83D\uDCB34890494776467862(\uD83E\uDD5DQIWI) \u2705\n----------------------------------\n\u041F\u0415\u0420\u0415\u0412\u041E\u0414 \u041D\u0410 \u0421\u0411\u0415\u0420 \u0438 \u0422\u0418\u041D\u042C\u041A\u041E\u0424\u0424 \u0414\u041E\u0421\u0422\u0423\u041F\u0415\u041D \u0422\u041E\u041B\u042C\u041A\u041E \u0414\u041B\u042F \u0421\u0422\u0410\u0420\u042B\u0425 \u041F\u041E\u041B\u042C\u0417\u041E\u0412\u0410\u0422\u0415\u041B\u0415\u0419\n(\u2757\u041A\u0422\u041E \u0420\u0410\u041D\u0415\u0415  \u0411\u0420\u0410\u041B \u041F\u041E\u0414\u041F\u0418\u0421\u041A\u0423\u2757)\n----------------------------------\n\u26A0\uFE0F\u0412\u0441\u0435 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u044B \u043F\u0440\u043E\u0432\u0435\u0440\u044F\u044E\u0442\u0441\u044F \u0432 \u0440\u0443\u0447\u043D\u0443\u044E \u0430\u0434\u043C\u0438\u043D\u043E\u043C \u26A0\uFE0F\n\uD83D\uDD10\u041E\u043F\u043B\u0430\u0442\u0438\u0432 \u043D\u0435 \u0437\u0430\u0431\u0443\u0434\u044C\u0442\u0435 \u043F\u0440\u0438\u043A\u0440\u0435\u043F\u0438\u0442\u044C \u0447\u0435\u043A \u0431\u043E\u0442\u0443. \n\u041F\u043E \u0432\u0441\u0435\u043C \u0432\u043E\u043F\u0440\u043E\u0441\u0430\u043C:\n\n\u260E\uFE0F @KO_PRIORITYHELPER_BOT\n__________________________\n";
-            const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
+            const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
                 reply_markup: {
                     one_time_keyboard: true,
                     inline_keyboard: [
@@ -174,8 +172,8 @@ class SceneGenerator {
         const access = new telegraf_1.Scenes.BaseScene('accesspayment');
         let text;
         access.enter(async (ctx) => {
-            let text = "\uD83D\uDC81\uD83C\uDFFB\u200D\u2642\uFE0F <b>\u041E\u043F\u043B\u0430\u0442\u0438\u043B\u0438?</b>\n\n\uD83D\uDC4C\uD83C\uDFFB \u0422\u043E\u0433\u0434\u0430 \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u0441\u044E\u0434\u0430 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u043E\u0439 (\u043D\u0435 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u043C!) \u043A\u0432\u0438\u0442\u0430\u043D\u0446\u0438\u044E \u043F\u043B\u0430\u0442\u0435\u0436\u0430: \u0441\u043A\u0440\u0438\u043D\u0448\u043E\u0442 \u0438\u043B\u0438 \u0444\u043E\u0442\u043E.\n\n\u041D\u0430 \u043A\u0432\u0438\u0442\u0430\u043D\u0446\u0438\u0438 \u0434\u043E\u043B\u0436\u043D\u044B \u0431\u044B\u0442\u044C \u0447\u0435\u0442\u043A\u043E \u0432\u0438\u0434\u043D\u044B: \u0434\u0430\u0442\u0430, \u0432\u0440\u0435\u043C\u044F \u0438 \u0441\u0443\u043C\u043C\u0430 \u043F\u043B\u0430\u0442\u0435\u0436\u0430.\n__________________________\n<b>\u0417\u0430 \u0441\u043F\u0430\u043C \u0432\u044B \u043C\u043E\u0436\u0435\u0442\u0435 \u0431\u044B\u0442\u044C \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u044B!</b>";
-            const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
+            text = "\uD83D\uDC81\uD83C\uDFFB\u200D\u2642\uFE0F <b>\u041E\u043F\u043B\u0430\u0442\u0438\u043B\u0438?</b>\n\n\uD83D\uDC4C\uD83C\uDFFB \u0422\u043E\u0433\u0434\u0430 \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u0441\u044E\u0434\u0430 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u043E\u0439 (\u043D\u0435 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u043C!) \u043A\u0432\u0438\u0442\u0430\u043D\u0446\u0438\u044E \u043F\u043B\u0430\u0442\u0435\u0436\u0430: \u0441\u043A\u0440\u0438\u043D\u0448\u043E\u0442 \u0438\u043B\u0438 \u0444\u043E\u0442\u043E.\n\n\u041D\u0430 \u043A\u0432\u0438\u0442\u0430\u043D\u0446\u0438\u0438 \u0434\u043E\u043B\u0436\u043D\u044B \u0431\u044B\u0442\u044C \u0447\u0435\u0442\u043A\u043E \u0432\u0438\u0434\u043D\u044B: \u0434\u0430\u0442\u0430, \u0432\u0440\u0435\u043C\u044F \u0438 \u0441\u0443\u043C\u043C\u0430 \u043F\u043B\u0430\u0442\u0435\u0436\u0430.\n__________________________\n<b>\u0417\u0430 \u0441\u043F\u0430\u043C \u0432\u044B \u043C\u043E\u0436\u0435\u0442\u0435 \u0431\u044B\u0442\u044C \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u044B!</b>";
+            const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
                 reply_markup: {
                     one_time_keyboard: true,
                     inline_keyboard: [
@@ -188,13 +186,14 @@ class SceneGenerator {
                 parse_mode: 'HTML'
             });
             ctx.session.message_id = message_id;
+            console.log(ctx.session.message_id);
         });
         access.on('photo', async (ctx) => {
             await ctx.telegram.sendPhoto(1177303799, ctx.message.photo[ctx.message.photo.length - 1].file_id, { caption: `${ctx.chat.id}\n${ctx.session.durationsub} ` });
             await ctx.telegram.deleteMessage(ctx.chat.id, ctx.session.message_id);
             let text = "\u2705 \u041A\u0432\u0438\u0442\u0430\u043D\u0446\u0438\u044F \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0430 \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u0443!\n\n\u041A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u043C\u044B \u043F\u0440\u043E\u0432\u0435\u0440\u0438\u043C \u043F\u043B\u0430\u0442\u0451\u0436 - \u0443 \u0412\u0430\u0441 \u0430\u043A\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0430! \u041E\u0436\u0438\u0434\u0430\u0439\u0442\u0435 ;)";
             await ctx.telegram.deleteMessage(ctx.chat.id, ctx.message.message_id);
-            const { message_id } = await ctx.replyWithHTML(text, {
+            const message_id = await ctx.replyWithHTML(text, {
                 reply_markup: {
                     one_time_keyboard: true,
                     inline_keyboard: [
@@ -212,12 +211,18 @@ class SceneGenerator {
     }
     subStatus() {
         const sub = new telegraf_1.Scenes.BaseScene('substatus');
-        let status = [0];
         sub.enter(async (ctx) => {
             let text = '';
             const user = await user_entity_1.User.query().findById(ctx.chat.id).returning('status');
+            if (!user) {
+                text = "\u231B\uFE0F \u0423 \u0412\u0430\u0441 \u043D\u0435\u0442 \u0434\u0435\u0439\u0441\u0442\u0432\u0443\u044E\u0449\u0435\u0439 \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0438.\n\n\u041E\u0437\u043D\u0430\u043A\u043E\u043C\u044C\u0442\u0435\u0441\u044C \u0441 \u0442\u0430\u0440\u0438\u0444\u0430\u043C\u0438, \u043D\u0430\u0436\u0430\u0432 \u043D\u0430 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044E\u0449\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443.";
+            }
+            else {
+                text = "\u2705\u0412\u0430\u0448\u0430 \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0430 \u0430\u043A\u0442\u0438\u0432\u043D\u0430";
+            }
+            console.log(ctx.session.message_id);
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML(text, {
+                const message_id = await ctx.replyWithHTML(text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -256,7 +261,7 @@ class SceneGenerator {
         q.enter(async (ctx) => {
             let text = "\u2699\uFE0F\u041F\u043E \u0432\u0441\u0435\u043C \u0432\u043E\u043F\u0440\u043E\u0441\u0430\u043C:\n@KO_PriorityHelper_Bot";
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML(text, {
+                const message_id = await ctx.replyWithHTML(text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -271,7 +276,7 @@ class SceneGenerator {
                 ctx.session.message_id = message_id;
             }
             else {
-                const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
+                const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -293,7 +298,7 @@ class SceneGenerator {
         info.enter(async (ctx) => {
             let text = "\uD83D\uDFE2 \u0421 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0412\u0430\u043C \u043F\u043E\u043B\u043D\u043E\u0446\u0435\u043D\u043D\u043E (\u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u044F \u0430\u0432\u0442\u043E\u043F\u0435\u0440\u0435\u0441\u044B\u043B\u043A\u0435, \u0431\u0435\u0437 \u0437\u0430\u0434\u0435\u0440\u0436\u043A\u0438) \u0431\u0443\u0434\u0443\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B \u0438\u0434\u0435\u0438 \u0438 \u0441\u0438\u0433\u043D\u0430\u043B\u044B \u0441\u0440\u0430\u0437\u0443 \u0438\u0437 20+ \u043A\u0430\u043D\u0430\u043B\u043E\u0432\n\n\u2139\uFE0F\u041F\u043E\u043B\u043D\u044B\u0439 \u0441\u043F\u0438\u0441\u043E\u043A \u043A\u0430\u043D\u0430\u043B\u043E\u0432 \u0432\u044B \u043C\u043E\u0436\u0435\u0442\u0435 \u0443\u0437\u043D\u0430\u0442\u044C \u0442\u0443\u0442: https://teletype.in/@ko_priority/list\n\n\u00A9\uFE0F\u041C\u044B \u043F\u043E\u0441\u0442\u043E\u044F\u043D\u043D\u043E \u0438\u0449\u0435\u043C \u043D\u043E\u0432\u044B\u0435 \u043A\u0430\u043D\u0430\u043B\u044B \u0438 \u043E\u0441\u0442\u0430\u0432\u043B\u044F\u0435\u043C \u0443 \u0441\u0435\u0431\u044F \u0432 \u043F\u043E\u0434\u0431\u043E\u0440\u043A\u0435 \u043B\u0443\u0447\u0448\u0438\u0445 \u0438\u0437 \u043B\u0443\u0447\u0448\u0438\u0445, \u0443\u0434\u0430\u043B\u044F\u044F \u0442\u0435\u0445, \u043A\u0442\u043E \u043D\u0435 \u044D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u0435\u043D";
             if (!ctx.session.message_id) {
-                const { message_id } = await ctx.replyWithHTML(text, {
+                const message_id = await ctx.replyWithHTML(text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [
@@ -308,7 +313,7 @@ class SceneGenerator {
                 ctx.session.message_id = message_id;
             }
             else {
-                const { message_id } = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
+                const message_id = await ctx.telegram.editMessageText(ctx.chat.id, ctx.session.message_id, 0, text, {
                     reply_markup: {
                         one_time_keyboard: true,
                         inline_keyboard: [

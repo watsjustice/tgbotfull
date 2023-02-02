@@ -1,8 +1,7 @@
-import { Context, Scenes } from "telegraf";
-import { Update } from "telegraf/typings/core/types/typegram";
+import { Scenes } from "telegraf";
 import { BotContext } from '../const';
 export declare class SceneGenerator {
-    reSendMess(): Scenes.BaseScene<Context<Update>>;
+    reSendMess(): any;
     Stages(): Scenes.BaseScene<BotContext>;
     subPayment(): Scenes.BaseScene<BotContext>;
     paymentInfo(): Scenes.BaseScene<BotContext>;

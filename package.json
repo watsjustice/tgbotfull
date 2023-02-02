@@ -4,7 +4,7 @@
   "main": "src/const.ts",
   "scripts": {
     "migrate": "knex migrate:latest --knexfile ./knexfile.ts",
-    "start": "tsc && node dist/const.js"
+    "start": "tsc | node dist/const.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,6 +1,10 @@
-import { SceneGenerator } from "./bot/scenes";
 import {session, Telegraf, Scenes, Context} from "telegraf";
 import * as dotenv from 'dotenv';
+import { MainMenuScene } from "./bot/scenes/menu/main_menu_scene";
+import { TariffStages } from "./bot/scenes/tariff/tariff_stages";
+import { Subscription } from "./bot/scenes/subscription.ts/sub_status";
+import { ThirdPointThings } from "./bot/scenes/other_stuff.ts/info_and_questions";
+import { AdmingCommands } from "./bot/scenes/AdminCommands/admin_commands";
 dotenv.config();
 
 interface sessionData {
@@ -15,24 +19,30 @@ export interface BotContext extends Context {
 }
 
 const bot = new Telegraf<BotContext>(process.env.BOT_TOKEN);
-const curScene : SceneGenerator = new SceneGenerator()
-const opt : any = curScene.reSendMess()
-const ssstage : any = curScene.Stages()
-const subpayment : any = curScene.subPayment()
-const paymentinfo : any = curScene.paymentInfo()
-const accesspayment : any = curScene.AccessPayment()
-const subStatus : any = curScene.subStatus()
-const infoAbout : any = curScene.infoAbout()
-const remoteQuestions : any = curScene.remoteQuestions()
-const AcceptTheSub : any = curScene.AcceptTheSub()
-const resendAction : any = curScene.ReSendAction()
+
+const MenuSceneControl : MainMenuScene = new MainMenuScene()
+const tariffSceneControl : TariffStages = new TariffStages()
+const oddStuff : ThirdPointThings = new ThirdPointThings()
+const adminCommand : AdmingCommands = new AdmingCommands()
+const sub : Subscription = new Subscription()
+
+const MainMenu : any = MenuSceneControl.MenuFunc()
+const tariffCatalog : any = tariffSceneControl.catalog()
+const tariffPayment : any = tariffSceneControl.payment()
+const tariffAccess : any = tariffSceneControl.access()
+const tariffBill : any = tariffSceneControl.billCheck()
+const subStatus : any = sub.subCheck()
+const infoAbout : any = oddStuff.information()
+const remoteQuestions : any = oddStuff.askYourQuestion()
+const AcceptTheSub : any = adminCommand.AcceptTheSub()
+const resendAction : any = adminCommand.reSendMess()
 
 const stage : any = new Scenes.Stage([
-    opt,
-    ssstage,
-    subpayment,
-    paymentinfo,
-    accesspayment,
+    MainMenu,
+    tariffCatalog,
+    tariffPayment,
+    tariffAccess,
+    tariffBill,
     subStatus,
     remoteQuestions,
     infoAbout,

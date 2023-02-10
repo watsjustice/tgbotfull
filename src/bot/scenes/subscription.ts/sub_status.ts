@@ -2,22 +2,26 @@ import { samples } from "src/bot/texts";
 import { BotContext } from "src/const";
 import { User } from "../../../entities/user_entity";
 import { Scenes } from "telegraf";
+import { Subscription } from "../../../entities/subscription_entity";
 
-export class Subscription{
+export class SubscriptionCheck{
 
     subCheck(){
         const sub = new Scenes.BaseScene<BotContext>('substatus');
 		sub.enter(async (ctx: any) => {
 			let text: string = '';
 
-			const user : User = await User.query().findById(ctx.chat.id).returning('status')
+			const validation : Subscription[] = await Subscription.query().where({
+				user_id : ctx.from.id,
+				is_paid : true
+			})
 			
 			if (ctx.session.message_id.message_id) {
 				ctx.session.message_id = ctx.session.message_id.message_id
 			}
 			
 
-			if (!user) { 
+			if (validation.length === 0) { 
 				text = samples.subscribeStatusRejection;
 
 			} else {

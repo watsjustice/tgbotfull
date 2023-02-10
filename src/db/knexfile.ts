@@ -4,16 +4,17 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 
-const knexCo: Knex.Config = {
+const knexConfig: Knex.Config = {
     client: 'pg',
-    connection: process.env.POSTGRES_URL,
+    connection: 'postgres://postgres:root@localhost:5432/kopriority',//process.env.POSTGRES_URL,
     migrations: {
-      directory: './db/migrations',
+      directory: './migrations',
+      stub: './migration.stub',
     },
     seeds: {
-      directory: './db/seeds',
+      directory: './seeds',
     },
     ...knexSnakeCaseMappers(),
 };
 
-export default knexCo; 
+export default knexConfig;

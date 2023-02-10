@@ -1,24 +1,22 @@
 import { User } from "../../entities/user_entity"
 import { Knex } from "knex";
-
-
+import { Order } from "../../entities/order_entity";
+import { Subscription } from "../../entities/subscription_entity";
 
 export async function up(knex: Knex) {
   return knex.schema.createTable(User.tableName, table => {
     table
         .string('id')
-        .notNullable()
+        .primary()
         .unique()
     table
-        .boolean('status')
+        .string('SubMode')
+        .defaultTo('inactive')
+    table
+        .string('attended')
         .notNullable()
 
-    table
-        .string('date')
-
-    table
-        .integer('duration')
-  });
+  })
 }
 
 export async function down(knex: Knex) {

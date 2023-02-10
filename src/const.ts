@@ -2,7 +2,7 @@ import {session, Telegraf, Scenes, Context} from "telegraf";
 import * as dotenv from 'dotenv';
 import { MainMenuScene } from "./bot/scenes/menu/main_menu_scene";
 import { TariffStages } from "./bot/scenes/tariff/tariff_stages";
-import { Subscription } from "./bot/scenes/subscription.ts/sub_status";
+import { SubscriptionCheck } from "./bot/scenes/subscription.ts/sub_status";
 import { ThirdPointThings } from "./bot/scenes/other_stuff.ts/info_and_questions";
 import { AdmingCommands } from "./bot/scenes/AdminCommands/admin_commands";
 dotenv.config();
@@ -24,7 +24,7 @@ const MenuSceneControl : MainMenuScene = new MainMenuScene()
 const tariffSceneControl : TariffStages = new TariffStages()
 const oddStuff : ThirdPointThings = new ThirdPointThings()
 const adminCommand : AdmingCommands = new AdmingCommands()
-const sub : Subscription = new Subscription()
+const sub : SubscriptionCheck = new SubscriptionCheck()
 
 const MainMenu : any = MenuSceneControl.MenuFunc()
 const tariffCatalog : any = tariffSceneControl.catalog()
@@ -54,16 +54,22 @@ const stage : any = new Scenes.Stage([
 bot.use(session({}), stage.middleware());
 
 
-bot.start(async ctx => {
-    await ctx.replyWithHTML(`KO PRIORITY дает доступ к аналитике, идеям и сигналам из приватных  каналов без задержки во времени. ⏱\n\nСхема проста: из канала-источника сообщения пересылаются в канал-копию. И таких зеркальных каналов у нас пара десятков.\n\nСписок актуальных каналов вы можете посмотреть в самом боте. Подойдёт как дополнение к своим идеям.`, 
+bot.start(async (ctx:any) => {
+
+    await ctx.telegram.sendPhoto(
+        ctx.chat.id,
+        { source : 'greeting.jpg' },
         {
-        reply_markup: {
-            one_time_keyboard: true,
-            inline_keyboard: [
-                [{text:'Главное меню',callback_data: 'main menu'}],
-            ]
-        },
-        disable_web_page_preview: true
+            caption : `KO PRIORITY дает доступ к аналитике, идеям и сигналам из приватных  каналов без задержки во времени. ⏱\n\nСхема проста: из канала-источника сообщения пересылаются в канал-копию. И таких зеркальных каналов у нас пара десятков.\n\nСписок актуальных каналов вы можете посмотреть в самом боте. Подойдёт как дополнение к своим идеям.`,
+            reply_markup: {
+                one_time_keyboard: true,
+                inline_keyboard: [
+                    [{text:'Главное меню',callback_data: 'main menu'}],
+                ]
+            },
+
+            disable_web_page_preview: true,
+            parse_mode: 'HTML',
     })
 })
 

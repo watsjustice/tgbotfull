@@ -1,11 +1,15 @@
 import { samples } from "src/bot/texts";
 import { BotContext } from "src/const";
 import { Scenes } from "telegraf";
+import { User } from "../../../entities/user_entity";
+import { Order } from "../../../entities/order_entity";
+import { Subscription } from "../../../entities/subscription_entity";
 
 export class TariffStages {
 
     catalog() {   
         const stage = new Scenes.BaseScene<BotContext>('stage');
+
 
 		stage.enter( async (ctx:any) => {
 
@@ -20,19 +24,20 @@ export class TariffStages {
 				        reply_markup: {
 				            one_time_keyboard: true,
 				            inline_keyboard: [
-				                [
-				                	{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
+				                
+				                	[{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
 	                    			[{text:'✅3 месяца за 3990',callback_data: '3monthsub'}],
 	                    			[{text:'✅12 месяцев за 14990',callback_data: '12monthsub'}],
+									[{text: 'Назад', callback_data: 'main menu'}],
 
 				            ]
 				        },
 				        disable_web_page_preview: true,
 				        parse_mode: 'HTML'
 	    			})
-
+				
 				ctx.session.message_id = message_id 
-
+				
 			} else { 
 				
 				const { message_id } = await ctx.telegram.editMessageText(
@@ -44,10 +49,11 @@ export class TariffStages {
 				        reply_markup: {
 				            one_time_keyboard: true,
 				            inline_keyboard: [
-				                [
-				                	{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
+				                
+				                	[{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
 	                    			[{text:'✅3 месяца за 3990',callback_data: '3monthsub'}],
 	                    			[{text:'✅12 месяцев за 14990',callback_data: '12monthsub'}],
+									[{text: 'Назад', callback_data: 'main menu'}],
 
 				            ]
 				        },
@@ -56,10 +62,22 @@ export class TariffStages {
 	    			})
 
 				ctx.session.message_id = message_id
-				console.log(message_id);
 			}
-		})
 
+			const heigthOrders : Order[] = await Order.query()
+			const subscription : Subscription[] = await Subscription.query().where("user_id",String(ctx.from.id))
+
+			let dat : Date = new Date()
+			let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
+			await Order.query().insert({
+				status : false,
+				duration : ctx.session.durationsub,
+				date : date, 
+
+			})
+			await Order.relatedQuery('user').for(heigthOrders.length+1).relate(ctx.from.id)
+		})
+		
 		return stage;
 	}
 
@@ -92,8 +110,12 @@ export class TariffStages {
 								one_time_keyboard: true,
 								inline_keyboard: [
 									[
-									    {text:'💵Оплатить',callback_data: 'paymentinfo'}],
-								    ]
+									    {text:'⚫Оплатить',callback_data: 'paymentinfo'}
+									],
+									[
+										{text: 'Назад',callback_data: 'stages'}
+									],
+								]
 						},
 				        disable_web_page_preview: true,
 				        parse_mode: 'HTML'
@@ -112,23 +134,25 @@ export class TariffStages {
 								one_time_keyboard: true,
 								inline_keyboard: [
 									[
-									    {text:'💵Оплатить',callback_data: 'paymentinfo'}],
-								    ]
+									    {text:'⚫Оплатить',callback_data: 'paymentinfo'}
+									],
+									[
+										{text: 'Назад', callback_data: 'stages'}
+									],
+								]
 						},
 				        disable_web_page_preview: true,
 				        parse_mode: 'HTML'
 	    			})
 
 				ctx.session.message_id = message_id
-				console.log(message_id);
 
 			} 
 
-									
 		})
 
 		return payment;
-
+		
     }
 
     access(){
@@ -147,6 +171,7 @@ export class TariffStages {
 							inline_keyboard: [
 								[
 								    {text:'✅Я оплатил',callback_data: 'accesspayment'}],
+									[{text: 'Назад', callback_data: 'subpay'}],
 							    ]
 					},
 			        disable_web_page_preview: true,
@@ -184,7 +209,6 @@ export class TariffStages {
 	    			})
 
 				ctx.session.message_id = message_id
-				console.log(message_id,'-----');
 		})
 
 		access.on('photo', async (ctx : any) => {
@@ -196,6 +220,13 @@ export class TariffStages {
 			await ctx.telegram.deleteMessage(ctx.chat.id, ctx.session.message_id)
 			text = samples.tariffStep5
 			await ctx.telegram.deleteMessage(ctx.chat.id, ctx.message.message_id)
+
+			
+			const orderId = await Order.query().where("user_id",ctx.from.id).patch({
+				status : true,
+				duration: ctx.session.durationsub
+			})
+
 
 			const { message_id } = await ctx.replyWithHTML(
 				text,

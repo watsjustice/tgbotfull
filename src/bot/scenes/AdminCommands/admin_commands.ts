@@ -3,6 +3,7 @@ import { User } from "../../../entities/user_entity";
 import { Scenes } from "telegraf";
 import { Subscription } from "../../../entities/subscription_entity";
 import { Order } from "../../../entities/order_entity";
+import { LastOrder } from "../../../entities/last_user_order_entity";
 
 export class AdmingCommands {
 
@@ -12,9 +13,12 @@ export class AdmingCommands {
 		messages.enter( async (ctx:any) => {
 			await ctx.replyWithHTML('Отправьте сообщение для пересылки')
 		
+			try{	
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch { 
 
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
 			}
 
 		})
@@ -22,25 +26,31 @@ export class AdmingCommands {
 		messages.on('text', async (ctx : any) => {
 			ctx.session.messageId = ctx.message.message_id
 
-			const subs = await Subscription.query().returning('*')
+			const subs = await Subscription.query().where({
+				is_paid : true,
+			})
+			console.log(subs)
 			for (let item in subs){
 				let dat : Date|number = new Date()
-				let theDateOfTheStart : Date|number = new Date(subs[item].start_date)
+				let theDateOfTheStart : Date|number = new Date(subs[item].startDate)
 				dat = new Date(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
-
-				if (+theDateOfTheStart - +dat > 24*60*60*1000*subs[item].type*10){
-					ctx.telegram.sendMessage(subs[item].id,
+				
+				if (+theDateOfTheStart - +dat > 24*60*60*1000*subs[item].type*30){
+					ctx.telegram.sendMessage(subs[item].userId,
 						'Ваша подписка истекла.'
 						)
-					await User.query().findById(subs[item].id).patch({
-						status : false,
+
+
+					await Subscription.query().findById(subs[item].id).patch({
+						isPaid : false,
 					})
 					
 				} else {
-			        ctx.telegram.copyMessage(
-			        	subs[item].user_id,
+
+			        await ctx.telegram.copyMessage(
+			        	subs[item].userId,
 			        	ctx.chat.id,
-			        	ctx.session.messageId
+			        	ctx.session.messageId,
 					)
 				}
 			}
@@ -95,6 +105,7 @@ export class AdmingCommands {
 		})
 
 		acc.on('text', async (ctx : any) => {
+			let price : number;
 			 
 			const subscription : Subscription[] = await Subscription.query()
 			const subscriptionState : Subscription[] = await Subscription.query().select('user_id').where('user_id',ctx.from.id)
@@ -104,6 +115,18 @@ export class AdmingCommands {
 				}
 			).returning('user_id')
 
+			if (subType[0].duration === 1){
+				price = 1750;
+			}
+
+			if (subType[0].duration === 3){
+				price = 4490;
+			}
+
+			if (subType[0].duration === 12){
+				price = 16750;
+			}			
+
 			if (subscriptionState.length === 0) {
 				let dat : Date = new Date()
 				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
@@ -111,8 +134,8 @@ export class AdmingCommands {
 
 				await Subscription.query().insert({
 					isPaid : true,
-					start_date : date,
-					price : 100,
+					startDate : date,
+					price : price,
 					type : +subType[0].duration,
 				})
 				
@@ -123,10 +146,46 @@ export class AdmingCommands {
 				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
 				await Subscription.query().where("user_id",String(ctx.from.id)).patch({
 					isPaid : true,
-					price : 100,
-					start_date : date,
+					price : price,
+					startDate : date,
 					type : +subType[0].duration
 				})
+			}
+
+			const id : Order[]= await Order.query().where({
+				user_id : ctx.from.id,
+				status : true,
+			})
+
+			let userId : string = String(ctx.message.text)
+			const isThereAnActiveOrder = await LastOrder.query()//.where({
+			// 	userId : userId,
+			// 	status : true,
+			// }) 
+			console.log(isThereAnActiveOrder);
+			
+			console.log(isThereAnActiveOrder.length,isThereAnActiveOrder);
+			
+
+			if (isThereAnActiveOrder.length === 0){
+				
+				await Order.relatedQuery('lastOrder').for(id[id.length-1].id).insert({
+					orderId : id[id.length-1].id,
+				})
+				
+				await LastOrder.query().for(id[id.length-1].id).patch({
+					userId : ctx.message.text,
+					status : true,
+					price : ctx.session.durationsub,
+				})
+
+			} else {
+				console.log('*************');
+				
+				await LastOrder.query().where({
+					userId : ctx.message.text,
+					status : true,
+				}).patch({price : ctx.session.durationsub})
 			}
 
 			try{

@@ -11,21 +11,56 @@ export class SubscriptionCheck{
 		sub.enter(async (ctx: any) => {
 			let text: string = '';
 
-			const validation : Subscription[] = await Subscription.query().where({
-				user_id : ctx.from.id,
-				is_paid : true
-			})
+			try {
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+				
+			}
+
+			let ids = String(ctx.from.id)
 			
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+			const validation : Subscription[] = await Subscription.query().where({
+				userId : ids,
+				isPaid : "true",
+			})
+
+			if (validation.length === 0){
+				text = samples.subscribeStatusRejection;
 			}
 			
+			for (let item in validation){
+				let dat : Date|number = new Date()
+				let theDateOfTheStart : Date|number = new Date(validation[item].startDate)
+				dat = new Date(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
+				
+				console.log(+dat - +theDateOfTheStart, '-------');
+				console.log(+theDateOfTheStart- +dat, '********');
+				console.log(24*60*60*1000*validation[item].type*30)
+				
 
-			if (validation.length === 0) { 
-				text = samples.subscribeStatusRejection;
+				if (+dat - +theDateOfTheStart < 24*60*60*1000*validation[item].type*30){
+					text = samples.subscribeStatusAcception;
+					break;
 
-			} else {
-				text = samples.subscribeStatusAcception;
+				} else {
+					text = samples.subscribeStatusRejection;
+					await Subscription.query().findById(validation[item].id).patch({
+						isPaid : false,
+					})
+
+				}
+
+
+			}
+			
+			try {
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+
 			}
 
 			if (!ctx.session.message_id){

@@ -4,6 +4,7 @@ import { Scenes } from "telegraf";
 import { User } from "../../../entities/user_entity";
 import { Order } from "../../../entities/order_entity";
 import { Subscription } from "../../../entities/subscription_entity";
+import { LastOrder } from "src/entities/last_user_order_entity";
 
 export class TariffStages {
 
@@ -13,8 +14,12 @@ export class TariffStages {
 
 		stage.enter( async (ctx:any) => {
 
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+			try {
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+
 			}
 
 			if (!ctx.session.message_id){
@@ -25,9 +30,9 @@ export class TariffStages {
 				            one_time_keyboard: true,
 				            inline_keyboard: [
 				                
-				                	[{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
-	                    			[{text:'✅3 месяца за 3990',callback_data: '3monthsub'}],
-	                    			[{text:'✅12 месяцев за 14990',callback_data: '12monthsub'}],
+				                	[{text:'✅1 месяц за 1750',callback_data: '1monthsub'}],
+	                    			[{text:'✅3 месяца за 4490',callback_data: '3monthsub'}],
+	                    			[{text:'✅12 месяцев за 16750',callback_data: '12monthsub'}],
 									[{text: 'Назад', callback_data: 'main menu'}],
 
 				            ]
@@ -50,9 +55,9 @@ export class TariffStages {
 				            one_time_keyboard: true,
 				            inline_keyboard: [
 				                
-				                	[{text:'✅1 месяц за 1490',callback_data: '1monthsub'}],
-	                    			[{text:'✅3 месяца за 3990',callback_data: '3monthsub'}],
-	                    			[{text:'✅12 месяцев за 14990',callback_data: '12monthsub'}],
+				                	[{text:'✅1 месяц за 1750',callback_data: '1monthsub'}],
+	                    			[{text:'✅3 месяца за 4490',callback_data: '3monthsub'}],
+	                    			[{text:'✅12 месяцев за 16750',callback_data: '12monthsub'}],
 									[{text: 'Назад', callback_data: 'main menu'}],
 
 				            ]
@@ -69,12 +74,12 @@ export class TariffStages {
 
 			let dat : Date = new Date()
 			let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
-			await Order.query().insert({
+			ctx.session.idsOrder = await Order.query().insertAndFetch({
 				status : false,
 				duration : ctx.session.durationsub,
 				date : date, 
-
 			})
+
 			await Order.relatedQuery('user').for(heigthOrders.length+1).relate(ctx.from.id)
 		})
 		
@@ -150,7 +155,6 @@ export class TariffStages {
 			} 
 
 		})
-
 		return payment;
 		
     }
@@ -179,7 +183,6 @@ export class TariffStages {
     			})
 
 			ctx.session.message_id = message_id
-			console.log(message_id);
 			
 		})
 		return info;
@@ -221,12 +224,14 @@ export class TariffStages {
 			text = samples.tariffStep5
 			await ctx.telegram.deleteMessage(ctx.chat.id, ctx.message.message_id)
 
+			let ids : number =  ctx.session.idsOrder.id
 			
-			const orderId = await Order.query().where("user_id",ctx.from.id).patch({
+			await Order.query().where({
+				id : ids,
+			}).patch({
 				status : true,
 				duration: ctx.session.durationsub
 			})
-
 
 			const { message_id } = await ctx.replyWithHTML(
 				text,

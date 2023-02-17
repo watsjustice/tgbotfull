@@ -10,8 +10,12 @@ export class ThirdPointThings{
 		info.enter(async (ctx : any) => {
 			let text =  samples.info
 
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+			try {
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+				
 			}
 
 			if (!ctx.session.message_id){
@@ -63,8 +67,12 @@ export class ThirdPointThings{
 
 			console.log(ctx.session.message_id, '-----------');
 			
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+			try {
+				if (ctx.session.message_id.message_id) {
+					ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+				
 			}
 
 			if (!ctx.session.message_id){

@@ -1,4 +1,4 @@
-import { BotContext } from "../../../src/const";
+import { BotContext } from "../../../const";
 import {Context, Scenes} from "telegraf";
 import { Message, Update } from "telegraf/typings/core/types/typegram";
 import { User } from "../../../entities/user_entity";

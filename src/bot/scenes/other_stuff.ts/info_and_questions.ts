@@ -1,5 +1,5 @@
 import { samples } from "../../../bot/texts";
-import { BotContext } from "src/const";
+import { BotContext } from "../../../const";
 import { Scenes } from "telegraf";
 
 export class ThirdPointThings{

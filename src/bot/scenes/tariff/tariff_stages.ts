@@ -1,5 +1,5 @@
-import { samples } from "../../../src/bot/texts";
-import { BotContext } from "../../../src/const";
+import { samples } from "../../../bot/texts";
+import { BotContext } from "../../../const";
 import { Scenes } from "telegraf";
 import { User } from "../../../entities/user_entity";
 import { Order } from "../../../entities/order_entity";

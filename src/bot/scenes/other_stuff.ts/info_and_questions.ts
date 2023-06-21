@@ -1,4 +1,4 @@
-import { samples } from "../../../src/bot/texts";
+import { samples } from "../../../bot/texts";
 import { BotContext } from "src/const";
 import { Scenes } from "telegraf";
 

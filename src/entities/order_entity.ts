@@ -3,6 +3,7 @@ import knexConfig from "../db/knexfile";
 import {Model} from "objection";
 import { User } from "./user_entity";
 import { Subscription } from "./subscription_entity";
+import { LastOrder } from "./last_user_order_entity";
 
 Model.knex(Knex(knexConfig));
 export class Order extends Model {
@@ -30,9 +31,19 @@ export class Order extends Model {
                     from : "order.duration",
                     to: "subscription.type"
                 }
+            },
+            lastOrder : {
+                relation : Model.HasOneRelation,
+                modelClass: LastOrder,
+                join : {
+                    from : "order.id",
+                    to: "lastOrder.orderId"
+                }
+
             }
         }
     }
+    
     id: number;
 
     userId : string;
@@ -48,6 +59,8 @@ export class Order extends Model {
     user : User;
 
     order : Subscription;
+
+    lastOrder : LastOrder;
 
 
 }   

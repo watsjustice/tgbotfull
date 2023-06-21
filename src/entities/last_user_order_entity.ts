@@ -33,7 +33,4 @@ export class LastOrder extends Model {
     order : Order;
 
     price : number;
-
-
-
-}   
+}

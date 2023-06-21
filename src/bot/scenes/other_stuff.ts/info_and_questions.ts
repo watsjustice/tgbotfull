@@ -8,45 +8,54 @@ export class ThirdPointThings{
         const info = new Scenes.BaseScene<BotContext>('info');
 
 		info.enter(async (ctx : any) => {
-			let text =  samples.info
 
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
-			}
+			try {
+				let text =  samples.info
 
-			if (!ctx.session.message_id){
-				const { message_id } = await ctx.replyWithHTML(
-					text,
-					{
-				        reply_markup: {
-								one_time_keyboard: true,
-								inline_keyboard: [
-									[
-									    {text:'Назад',callback_data: 'main menu'}],
-								    ]
-						},
-				        disable_web_page_preview: true,
-				        parse_mode: 'HTML'
-	    			})
+				try {
+					if (ctx.session.message_id.message_id) {
+						ctx.session.message_id = ctx.session.message_id.message_id
+					}
+				} catch {
+					
+				}
 
-				ctx.session.message_id = message_id
-			} else {
-				const { message_id } = await ctx.telegram.editMessageText(
-					ctx.chat.id,
-		            ctx.session.message_id,
-		            0,
-					text,
-					{
-				        reply_markup: {
-								one_time_keyboard: true,
-								inline_keyboard: [
-									[
-									    {text:'Назад',callback_data: 'main menu'}],
-								    ]
-						},
-				        disable_web_page_preview: true,
-				        parse_mode: 'HTML'
-	    			})
+				if (!ctx.session.message_id){
+					const { message_id } = await ctx.replyWithHTML(
+						text,
+						{
+					        reply_markup: {
+									one_time_keyboard: true,
+									inline_keyboard: [
+										[
+										    {text:'Назад',callback_data: 'main menu'}],
+									    ]
+							},
+					        disable_web_page_preview: true,
+					        parse_mode: 'HTML'
+		    			})
+
+					ctx.session.message_id = message_id
+				} else {
+					const { message_id } = await ctx.telegram.editMessageText(
+						ctx.chat.id,
+			            ctx.session.message_id,
+			            0,
+						text,
+						{
+					        reply_markup: {
+									one_time_keyboard: true,
+									inline_keyboard: [
+										[
+										    {text:'Назад',callback_data: 'main menu'}],
+									    ]
+							},
+					        disable_web_page_preview: true,
+					        parse_mode: 'HTML'
+		    			})
+				}
+			} catch {
+				await ctx.enter('main menu')
 			}
 
 		})
@@ -59,52 +68,60 @@ export class ThirdPointThings{
 		
 
 		q.enter(async (ctx : any) => {
-			let text = samples.questions
 
-			console.log(ctx.session.message_id, '-----------');
-			
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+			try {
+				let text = samples.questions
+
+				console.log(ctx.session.message_id, '-----------');
+				
+				try {
+					if (ctx.session.message_id.message_id) {
+						ctx.session.message_id = ctx.session.message_id.message_id
+					}
+				} catch {
+					
+				}
+
+				if (!ctx.session.message_id){
+					const { message_id } = await ctx.replyWithHTML(
+						text,
+						{
+					        reply_markup: {
+									one_time_keyboard: true,
+									inline_keyboard: [
+										[
+										    {text:'Назад',callback_data: 'main menu'}],
+									    ]
+							},
+					        disable_web_page_preview: true,
+					        parse_mode: 'HTML'
+		    			})
+
+					ctx.session.message_id = message_id
+				} else {
+					const { message_id } = await ctx.telegram.editMessageText(
+						ctx.chat.id,
+			            ctx.session.message_id,
+			            0,
+
+						text,
+						{
+					        reply_markup: {
+									one_time_keyboard: true,
+									inline_keyboard: [
+										[
+										    {text:'Назад',callback_data: 'main menu'}],
+									    ]
+							},
+					        disable_web_page_preview: true,
+					        parse_mode: 'HTML'
+		    			})
+
+					ctx.session.message_id = message_id
+				}
+			} catch { 
+				await ctx.scene.enter('main menu')
 			}
-
-			if (!ctx.session.message_id){
-				const { message_id } = await ctx.replyWithHTML(
-					text,
-					{
-				        reply_markup: {
-								one_time_keyboard: true,
-								inline_keyboard: [
-									[
-									    {text:'Назад',callback_data: 'main menu'}],
-								    ]
-						},
-				        disable_web_page_preview: true,
-				        parse_mode: 'HTML'
-	    			})
-
-				ctx.session.message_id = message_id
-			} else {
-				const { message_id } = await ctx.telegram.editMessageText(
-					ctx.chat.id,
-		            ctx.session.message_id,
-		            0,
-
-					text,
-					{
-				        reply_markup: {
-								one_time_keyboard: true,
-								inline_keyboard: [
-									[
-									    {text:'Назад',callback_data: 'main menu'}],
-								    ]
-						},
-				        disable_web_page_preview: true,
-				        parse_mode: 'HTML'
-	    			})
-
-				ctx.session.message_id = message_id
-			}
-
 		})
 		return q;
 	}

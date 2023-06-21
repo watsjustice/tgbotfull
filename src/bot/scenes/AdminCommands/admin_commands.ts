@@ -3,6 +3,7 @@ import { User } from "../../../entities/user_entity";
 import { Scenes } from "telegraf";
 import { Subscription } from "../../../entities/subscription_entity";
 import { Order } from "../../../entities/order_entity";
+import { LastOrder } from "../../../entities/last_user_order_entity";
 
 export class AdmingCommands {
 
@@ -10,40 +11,37 @@ export class AdmingCommands {
         const messages = new Scenes.BaseScene<BotContext>('q1f8y');
 
 		messages.enter( async (ctx:any) => {
-			await ctx.replyWithHTML('Отправьте сообщение для пересылки')
-		
+			try{
+				await ctx.replyWithHTML('Отправьте сообщение для пересылки')
+			
+				try{	
+					if (ctx.session.message_id.message_id) {
+						ctx.session.message_id = ctx.session.message_id.message_id
+					}
+				} catch { 
 
-			if (ctx.session.message_id.message_id) {
-				ctx.session.message_id = ctx.session.message_id.message_id
+				}
+			} catch {
+				await ctx.scene.enter('main menu')
 			}
 
 		})
 
 		messages.on('text', async (ctx : any) => {
-			ctx.session.messageId = ctx.message.message_id
+			ctx.session.messageIdtoMirror = ctx.message.message_id
 
-			const subs = await Subscription.query().returning('*')
-			for (let item in subs){
-				let dat : Date|number = new Date()
-				let theDateOfTheStart : Date|number = new Date(subs[item].start_date)
-				dat = new Date(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
-
-				if (+theDateOfTheStart - +dat > 24*60*60*1000*subs[item].type*10){
-					ctx.telegram.sendMessage(subs[item].id,
-						'Ваша подписка истекла.'
-						)
-					await User.query().findById(subs[item].id).patch({
-						status : false,
-					})
+            const userAll = await User.query()
+            
+            for (let item of userAll){
+                await ctx.telegram.copyMessage(
+			        item.id,
+			        ctx.chat.id,
+			        ctx.session.messageIdtoMirror,
+				)
+            }
 					
-				} else {
-			        ctx.telegram.copyMessage(
-			        	subs[item].user_id,
-			        	ctx.chat.id,
-			        	ctx.session.messageId
-					)
-				}
-			}
+
+	
 
 			await ctx.scene.leave()
  
@@ -84,17 +82,23 @@ export class AdmingCommands {
 		const acc = new Scenes.BaseScene<BotContext>('acception');
 
 		acc.enter(async (ctx:any) => {
-			await ctx.replyWithHTML('<b>Введите id пользователя</b>')
-			try{
-				if (ctx.session.message_id.message_id) {
-					ctx.session.message_id = ctx.session.message_id.message_id
+
+			try {
+				await ctx.replyWithHTML('<b>Введите id пользователя</b>')
+				try{
+					if (ctx.session.message_id.message_id) {
+						ctx.session.message_id = ctx.session.message_id.message_id
+					}
+				} catch {
+					
 				}
-			} catch {
-				
+			} catch { 
+				await ctx.scene.enter('main menu')
 			}
 		})
 
 		acc.on('text', async (ctx : any) => {
+			let price : number;
 			 
 			const subscription : Subscription[] = await Subscription.query()
 			const subscriptionState : Subscription[] = await Subscription.query().select('user_id').where('user_id',ctx.from.id)
@@ -103,30 +107,83 @@ export class AdmingCommands {
 				user_id : ctx.message.text
 				}
 			).returning('user_id')
+            
+            try{
+    			if (subType[0].duration === 1){
+    				price = 1750;
+    			}
+    		} catch(err){
+    		console.log(err)
+    		}
+    		
+            
+            try {
+    			if (subType[0].duration === 3){
+    				price = 4490;
+    			}
+    
+    			if (subType[0].duration === 12){
+    				price = 16750;
+    			}			
+    
+    			if (subscriptionState.length === 0) {
+    				let dat : Date = new Date()
+    				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
+    
+    
+    				await Subscription.query().insert({
+    					isPaid : true,
+    					startDate : date,
+    					price : price,
+    					type : +subType[0].duration,
+    				})
+    				
+    				await Subscription.relatedQuery('user').for(subscription.length+1).relate(+ctx.message.text)
+    			} else {
+    				
+    				let dat : Date = new Date()
+    				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
+    				await Subscription.query().where("user_id",String(ctx.from.id)).patch({
+    					isPaid : true,
+    					price : price,
+    					startDate : date,
+    					type : +subType[0].duration
+    				})
+    			}
+			} catch(err){
+    		    console.log(err)
+    		}
+				
 
-			if (subscriptionState.length === 0) {
-				let dat : Date = new Date()
-				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
+			const id : Order[]= await Order.query().where({
+				userId : ctx.message.text,
+				status : true,
+			})
 
+			let userId : string = String(ctx.message.text)
+			const isThereAnActiveOrder = await LastOrder.query().where({
+			 	userId : userId,
+			 	status : true,
+			}) 
 
-				await Subscription.query().insert({
-					isPaid : true,
-					start_date : date,
-					price : 100,
-					type : +subType[0].duration,
+			if (isThereAnActiveOrder.length === 0){
+				
+				await Order.relatedQuery('lastOrder').for(id[id.length-1].id).insert({
+					orderId : id[id.length-1].id,
 				})
 				
-				await Subscription.relatedQuery('user').for(subscription.length+1).relate(+ctx.message.text)
+				await LastOrder.query().for(id[id.length-1].id).patch({
+					userId : ctx.message.text,
+					status : true,
+					price : ctx.session.durationsub,
+				})
+
 			} else {
 				
-				let dat : Date = new Date()
-				let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
-				await Subscription.query().where("user_id",String(ctx.from.id)).patch({
-					isPaid : true,
-					price : 100,
-					start_date : date,
-					type : +subType[0].duration
-				})
+				await LastOrder.query().where({
+					userId : ctx.message.text,
+					status : true,
+				}).patch({price : ctx.session.durationsub})
 			}
 
 			try{

@@ -23,5 +23,5 @@ export const enum samples{
 						'<a href = "https://teletype.in/@ko_priority/FAQ">❓Вопрос-ответ (FAQ)</a>' + '\n\n' + 
 						'©️KO PRIORITY — Мы есть, потому что нужны вам',
 
-	
+	tariffSale = '▶Тариф:  1 месяц'+ '\n' + '▶Стоимость: 1250₽ ' + '\n'+'▶Срок действия: 31 дней',
 }

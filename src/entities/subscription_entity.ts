@@ -16,9 +16,9 @@ export class Subscription extends Model {
 
     isPaid: boolean;
 
-    start_date: string;
+    startDate: string;
 
-    end_date: string;
+    endDate: string;
 
     type: number;
 
@@ -26,7 +26,7 @@ export class Subscription extends Model {
 
     user : User;
 
-    user_id : string;
+    userId : string;
 
     subscriptionType : Order;
 

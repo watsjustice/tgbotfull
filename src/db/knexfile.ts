@@ -6,7 +6,7 @@ dotenv.config();
 
 const knexConfig: Knex.Config = {
     client: 'pg',
-    connection: 'postgres://postgres:root@localhost:5432/kopriority',//process.env.POSTGRES_URL,
+    connection: 'postgres://root:Gerrard27!@localhost/requiem1',//process.env.POSTGRES_URL,
     migrations: {
       directory: './migrations',
       stub: './migration.stub',

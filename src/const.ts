@@ -18,7 +18,7 @@ export interface BotContext extends Context {
     session: sessionData,
 }
 
-const bot = new Telegraf<BotContext>(process.env.BOT_TOKEN);
+const bot = new Telegraf<BotContext>('5658571260:AAHlHRz0NeQYgjFH6mj4qNT26SUjuIU-zME')
 
 const MenuSceneControl : MainMenuScene = new MainMenuScene()
 const tariffSceneControl : TariffStages = new TariffStages()
@@ -56,22 +56,18 @@ bot.use(session({}), stage.middleware());
 
 bot.start(async (ctx:any) => {
 
-    await ctx.telegram.sendPhoto(
-        ctx.chat.id,
-        { source : 'greeting.jpg' },
+    let text = 'KO PRIORITY дает доступ к аналитике, идеям и сигналам из приватных  каналов без задержки во времени. ⏱\n\nСхема проста: из канала-источника сообщения пересылаются в канал-копию. И таких зеркальных каналов у нас пара десятков.\n\nСписок актуальных каналов вы можете посмотреть в самом боте. Подойдёт как дополнение к своим идеям' 
+    await ctx.reply(
+        text,
         {
-            caption : `KO PRIORITY дает доступ к аналитике, идеям и сигналам из приватных  каналов без задержки во времени. ⏱\n\nСхема проста: из канала-источника сообщения пересылаются в канал-копию. И таких зеркальных каналов у нас пара десятков.\n\nСписок актуальных каналов вы можете посмотреть в самом боте. Подойдёт как дополнение к своим идеям.`,
-            reply_markup: {
+            reply_markup : {
                 one_time_keyboard: true,
                 inline_keyboard: [
                     [{text:'Главное меню',callback_data: 'main menu'}],
                 ]
-            },
-
-            disable_web_page_preview: true,
-            parse_mode: 'HTML',
-    })
-})
+        },
+    })}
+)
 
 
 bot.action('main menu', async (ctx : any) => {
@@ -92,6 +88,12 @@ bot.action('12monthsub', async (ctx : any) => {
     ctx.session.thesub = 3
     ctx.session.durationsub = 12
     await ctx.scene.enter('subpay');
+})
+
+bot.action('sale', async (ctx : any) => {
+    ctx.session.thesub = 4
+    ctx.session.durationsub = 1
+    await ctx.scene.enter('subpay') 
 })
 
 bot.action('stages', async (ctx : any) => {

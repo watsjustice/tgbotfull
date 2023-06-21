@@ -1,4 +1,4 @@
-import { BotContext } from "src/const";
+import { BotContext } from "../../../src/const";
 import { User } from "../../../entities/user_entity";
 import { Scenes } from "telegraf";
 import { Subscription } from "../../../entities/subscription_entity";

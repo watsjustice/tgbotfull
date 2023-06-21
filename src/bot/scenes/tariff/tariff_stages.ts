@@ -1,10 +1,10 @@
-import { samples } from "src/bot/texts";
-import { BotContext } from "src/const";
+import { samples } from "../../../src/bot/texts";
+import { BotContext } from "../../../src/const";
 import { Scenes } from "telegraf";
 import { User } from "../../../entities/user_entity";
 import { Order } from "../../../entities/order_entity";
 import { Subscription } from "../../../entities/subscription_entity";
-import { LastOrder } from "src/entities/last_user_order_entity";
+import { LastOrder } from "../../../entities/last_user_order_entity";
 
 export class TariffStages {
 

@@ -12,7 +12,7 @@ export class MainMenuScene {
 
         menu.enter(async (ctx : any) =>{
             
-            const user : User = await User.query().findById(ctx.from.id).returning('*')
+            const user = await User.query().findById(ctx.from.id).returning('*')
             let dat : Date = new Date()
             let date : string = String(String(dat.getFullYear()) + '-' + '0'+String(dat.getMonth()+1) + '-' + String(dat.getDate()))
             if (!user){

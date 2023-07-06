@@ -32,8 +32,6 @@ export class TariffStages {
 					            one_time_keyboard: true,
 					            inline_keyboard: [
 					                    
-					                    
-					   		[{text:'✅1 месяц за 1250',callback_data: 'sale'}],
 					                [{text:'✅1 месяц за 1750',callback_data: '1monthsub'}],
 		                    			[{text:'✅3 месяца за 4490',callback_data: '3monthsub'}],
 		                    			[{text:'✅12 месяцев за 16750',callback_data: '12monthsub'}],
@@ -58,8 +56,7 @@ export class TariffStages {
 					        reply_markup: {
 					            one_time_keyboard: true,
 					            inline_keyboard: [
-					                    
-					                [{text:'✅1 месяц за 1250',callback_data: 'sale'}],    
+					                      
 					                [{text:'✅1 месяц за 1750',callback_data: '1monthsub'}],
 		                    			[{text:'✅3 месяца за 4490',callback_data: '3monthsub'}],
 		                    			[{text:'✅12 месяцев за 16750',callback_data: '12monthsub'}],
